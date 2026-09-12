@@ -16,6 +16,8 @@ let GROUP = "main"; // host | main
 function groupKey(host) { return GROUP === "host" ? host : mainDomain(host); }
 function dhm(sec) { const m = Math.round(sec / 60); const d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60; const out = []; if (d) out.push(d + " " + tr("unit_d")); if (h) out.push(h + " " + tr("unit_h")); if (mm || !out.length) out.push(mm + " " + tr("unit_min")); return out.join(" "); }
 function iso(offset) { const d = new Date(Date.now() - offset * 86400000); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+// Escape anything we put into innerHTML (domain names can come from an imported file).
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 let STATS = { totalSeconds: 0, byDomain: {}, byDay: {}, since: null };
 
@@ -100,8 +102,8 @@ function renderRange() {
   const rows = all.slice(0, 100);
   const max = Math.max(1, ...rows.map((r) => r.sec));
   const tb = document.getElementById("rangeSites"); tb.innerHTML = "";
-  for (const r of rows) { const tr2 = document.createElement("tr"); tr2.innerHTML = `<td class="dom" title="${r.domain}">${r.domain}</td><td class="num">${dhm(r.sec)}</td><td><div class="bar" style="width:${Math.round((r.sec / max) * 100)}%"></div></td>`; tb.appendChild(tr2); }
-  if (!rows.length) tb.innerHTML = `<tr><td colspan="3" class="muted">${tr("empty_range", q)}</td></tr>`;
+  for (const r of rows) { const tr2 = document.createElement("tr"); tr2.innerHTML = `<td class="dom" title="${esc(r.domain)}">${esc(r.domain)}</td><td class="num">${dhm(r.sec)}</td><td><div class="bar" style="width:${Math.round((r.sec / max) * 100)}%"></div></td>`; tb.appendChild(tr2); }
+  if (!rows.length) tb.innerHTML = `<tr><td colspan="3" class="muted">${tr("empty_range", esc(q))}</td></tr>`;
   document.getElementById("rangeCount").textContent = q ? tr("count_found", all.length) : tr("count_domains", totalCount);
 }
 
@@ -112,7 +114,7 @@ function renderTopVisits() {
   const rows = Object.entries(visits).map(([domain, n]) => ({ domain, visits: n, sec: secs[domain] || 0 })).sort((a, b) => b.visits - a.visits).slice(0, 100);
   document.getElementById("topSiteHead").textContent = tr(GROUP === "host" ? "col_site_sub" : "col_site_main");
   const tb = document.getElementById("topVisits"); tb.innerHTML = "";
-  for (const r of rows) { const tr2 = document.createElement("tr"); tr2.innerHTML = `<td class="dom" title="${r.domain}">${r.domain}</td><td class="num">${r.visits}</td><td class="num muted">${dhm(r.sec)}</td>`; tb.appendChild(tr2); }
+  for (const r of rows) { const tr2 = document.createElement("tr"); tr2.innerHTML = `<td class="dom" title="${esc(r.domain)}">${esc(r.domain)}</td><td class="num">${r.visits}</td><td class="num muted">${dhm(r.sec)}</td>`; tb.appendChild(tr2); }
   if (!rows.length) tb.innerHTML = `<tr><td colspan="3" class="muted">${tr("empty_top")}</td></tr>`;
 }
 

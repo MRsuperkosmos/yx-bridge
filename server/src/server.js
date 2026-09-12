@@ -10,6 +10,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import crypto from "node:crypto";
+import { fileURLToPath } from "node:url";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
@@ -23,7 +25,9 @@ const log = (m) => process.stderr.write(`[yx-bridge] ${m}\n`);
 
 // Optional password so only the genuine extension (which stores the same password)
 // may connect to the local port. Source: env YX_BRIDGE_TOKEN, else a token file.
-const TOKEN_FILE = process.env.YX_BRIDGE_TOKEN_FILE || path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..", ".token");
+const HERE = path.dirname(fileURLToPath(import.meta.url)); // works with spaces and non-Latin letters in the path
+const PKG = (() => { try { return JSON.parse(fs.readFileSync(path.join(HERE, "..", "package.json"), "utf8")); } catch { return { version: "0.0.0" }; } })();
+const TOKEN_FILE = process.env.YX_BRIDGE_TOKEN_FILE || path.join(HERE, "..", ".token");
 function readToken() {
   if (process.env.YX_BRIDGE_TOKEN) return String(process.env.YX_BRIDGE_TOKEN).trim();
   try { const t = fs.readFileSync(TOKEN_FILE, "utf8").trim(); return t || null; } catch { return null; }
@@ -853,7 +857,9 @@ tools.push(
       const stamp = new Date().toISOString().slice(0, 10);
       const jsonFile = path.join(dir, `yx-stats-${stamp}.json`);
       fs.writeFileSync(jsonFile, JSON.stringify(raw, null, 1));
-      const md = (h) => { const p = String(h).split("."); if (p.length <= 2) return h; return p.slice(-2).join("."); };
+      // Same registrable-domain rule as the extension (docs.github.com → github.com, bbc.co.uk stays bbc.co.uk).
+      const MULTI_TLD = new Set(["co.uk", "org.uk", "gov.uk", "ac.uk", "com.au", "net.au", "org.au", "co.jp", "co.nz", "com.br", "com.tr", "co.in", "com.ua", "co.il", "com.cn", "com.mx", "com.sg", "com.hk", "com.ru"]);
+      const md = (h) => { const p = String(h).split("."); if (p.length <= 2) return h; const l2 = p.slice(-2).join("."); return MULTI_TLD.has(l2) ? p.slice(-3).join(".") : l2; };
       const byMain = {};
       for (const [host, v] of Object.entries(raw.byDomain || {})) { const m = md(host); const t = byMain[m] = byMain[m] || { seconds: 0, visits: 0 }; t.seconds += v.seconds; t.visits += v.visits; }
       const rows = [["domain", "minutes", "hours", "visits"]].concat(Object.entries(byMain).sort((x, y) => y[1].seconds - x[1].seconds).map(([d, v]) => [d, Math.round(v.seconds / 60), (Math.round(v.seconds / 360) / 10).toString(), v.visits]));
@@ -876,7 +882,7 @@ tools.push(
       const act = a.action || "status";
       if (act === "status") return { passwordSet: !!TOKEN, source: process.env.YX_BRIDGE_TOKEN ? "env" : (TOKEN ? "file" : "none"), tokenFile: TOKEN_FILE };
       if (act === "off") { await bridge.call("set_password", { token: null }).catch(() => {}); TOKEN = null; writeToken(null); return { ok: true, passwordSet: false, note: "Password removed. The port is open to any local client again." }; }
-      const pw = a.password || ("yx-" + Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 6));
+      const pw = a.password || ("yx-" + crypto.randomBytes(18).toString("base64url").replace(/[^A-Za-z0-9]/g, "").slice(0, 16));
       await bridge.call("set_password", { token: pw }); // store in the extension first
       TOKEN = pw; writeToken(pw); // then require it server-side
       return {
@@ -912,7 +918,7 @@ tools.push(
   },
 );
 
-const server = new Server({ name: "yx-bridge-mcp", version: "0.1.0" }, { capabilities: { tools: {} } });
+const server = new Server({ name: "yx-bridge-mcp", version: PKG.version }, { capabilities: { tools: {} } });
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: tools.map(({ name, description, inputSchema }) => ({ name, description, inputSchema })),

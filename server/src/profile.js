@@ -30,9 +30,9 @@ const CANDIDATES = {
     processName: "Yandex",
   },
   linux: {
-    userData: [path.join(os.homedir(), ".config", "yx-bridge"), path.join(os.homedir(), ".config", "yx-bridge-beta")],
-    exe: ["/usr/bin/yx-bridge", "/usr/bin/yx-bridge-beta", "/opt/yandex/browser/yx-bridge"],
-    processName: "yx-bridge",
+    userData: [path.join(os.homedir(), ".config", "yandex-browser"), path.join(os.homedir(), ".config", "yandex-browser-beta")],
+    exe: ["/usr/bin/yandex-browser", "/usr/bin/yandex-browser-beta", "/opt/yandex/browser/yandex-browser"],
+    processName: "yandex-browser",
   },
 };
 

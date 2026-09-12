@@ -66,7 +66,7 @@ document.getElementById("pwToggle").addEventListener("click", () => {
 });
 document.getElementById("pwSave").addEventListener("click", () => {
   let pw = document.getElementById("pwInput").value.trim();
-  if (!pw) pw = "yx-" + Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8);
+  if (!pw) { const a = new Uint8Array(14); crypto.getRandomValues(a); pw = "yx-" + Array.from(a, (b) => "abcdefghijklmnopqrstuvwxyz0123456789"[b % 36]).join(""); }
   chrome.runtime.sendMessage({ type: "setPassword", value: pw }, (r) => {
     document.getElementById("pwMsg").textContent = (r && r.ok) ? tr("pw_saved", pw) : tr("pw_error", r && r.error);
     document.getElementById("pwInput").value = "";

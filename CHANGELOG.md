@@ -5,6 +5,15 @@ All notable changes to YX Bridge. Dates are 2026.
 ## 1.0.0 — 12 Sep
 First stable public release. YX Bridge is a browser extension plus a local MCP server that gives an AI agent access to your open tabs: read pages, edit the DOM, run JS, take screenshots, read media, send raw DevTools commands, control Yandex Browser's auto-translation, and drive the browser UI (Windows). 254 tools. Optional local password on the port, a pause kill-switch, and browsing statistics (local-time hourly chart, time zone, JSON/CSV export). Bilingual EN/RU interface. Apache-2.0.
 
+Hardening done during the release review:
+- A client becomes "the extension" only after a hello that passes the password check. Unauthenticated sockets can no longer displace the real extension, receive commands, spoof replies or change the password; a client that never says hello is dropped.
+- The password/token file path is derived with `fileURLToPath`, so installs under folders with spaces or non-Latin letters work.
+- Yandex Browser paths on Linux restored (they had been caught by the project rename).
+- The statistics page escapes domain names, so an imported file cannot inject markup.
+- Passwords are generated from a cryptographic random source (server and popup).
+- The MCP handshake reports the real package version; CSV export groups multi-part TLDs (co.uk) like the extension.
+- New offline test `server/test-auth.mjs` for the connection/password rules.
+
 ## 0.9.6 — 12 Sep
 - **Statistics record and show your time zone.** The extension reads your device's zone (e.g. Europe/Amsterdam, UTC+2), stores it with the data, shows it on the statistics page next to `Tracking since`, and reports it to the agent. Day and hour counting already runs in that zone.
 

@@ -291,7 +291,9 @@ The extension records how long you spend on each site (active-tab time per domai
 ```
 cd server
 node src/selftest.js          # offline: bridge + tool list
-node test-live.mjs            # live run of DOM tools on example.com (needs the browser with the extension)
+node test-auth.mjs            # offline: connection/password rules of the bridge (rogue clients, wrong password, spoofed replies)
+node test-all.mjs             # live: every tool, in a new MINIMIZED window, never focuses it (safe while you work)
+node test-live.mjs            # live run of DOM tools on example.com — activates a tab and FOCUSES the work window
 node test-translate.mjs       # live: translation control, PDF, find_text, tables
 node test-extras.mjs          # live: the 0.4.0 batch (history, bookmarks, downloads, network log, …)
 node test-media.mjs           # live: images and YouTube frames
@@ -632,7 +634,9 @@ Gemini CLI, Windsurf, Cline, Claude Desktop, VS Code Copilot, Zed) и пропи
 ```
 cd server
 node src/selftest.js          # офлайн: мост + список инструментов
-node test-live.mjs            # живой прогон DOM-инструментов на example.com (нужен браузер с расширением)
+node test-auth.mjs            # оффлайн: правила подключения и пароля моста (чужие клиенты, неверный пароль, подделка ответов)
+node test-all.mjs             # живой: все инструменты в новом СВЁРНУТОМ окне, фокус не трогает (безопасно во время работы)
+node test-live.mjs            # живой прогон DOM-инструментов на example.com — активирует вкладку и ПЕРЕВОДИТ ФОКУС на рабочее окно
 node test-translate.mjs       # живой: управление переводом, PDF, поиск текста, таблицы
 node test-extras.mjs          # живой: партия 0.4.0 (история, закладки, загрузки, сетевой лог, …)
 node test-media.mjs           # живой: картинки и кадры с YouTube
