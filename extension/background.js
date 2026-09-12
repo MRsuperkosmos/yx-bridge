@@ -26,7 +26,7 @@ const localDay = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() +
 // so the data is self-describing and the page/agent can label it correctly.
 function tzStamp(s) { try { s.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null; } catch { s.tz = null; } s.tzOffsetMin = -new Date().getTimezoneOffset(); return s; }
 
-// Draw the toolbar icon: white bulb on orange, with a status dot in the corner —
+// Draw the toolbar icon: a big orange bulb (no background box), with a status dot in the corner —
 // green = connected, red = not connected, yellow = paused by the user.
 function paintIcon() {
   const dot = paused ? "#F5C518" : status.connected ? "#2ECC71" : "#E5484D";
@@ -41,13 +41,16 @@ function paintIcon() {
         if (g.roundRect) g.roundRect(X, Y, Wd, H, R);
         else { g.moveTo(X + R, Y); g.arcTo(X + Wd, Y, X + Wd, Y + H, R); g.arcTo(X + Wd, Y + H, X, Y + H, R); g.arcTo(X, Y + H, X, Y, R); g.arcTo(X, Y, X + Wd, Y, R); g.closePath(); }
       };
-      rr(0, 0, 128, 128, 26); g.fillStyle = "#F97316"; g.fill();          // orange background
-      g.fillStyle = "#fff";
-      g.beginPath(); g.arc(64 * k, 50 * k, 32 * k, 0, 7); g.fill();        // bulb glass
-      rr(55, 78, 18, 24, 6); g.fill();                                      // screw base
-      g.fillStyle = "#F97316"; for (const ty of [86, 92, 98]) g.fillRect(55 * k, ty * k, 18 * k, 2.6 * k); // threads
-      g.beginPath(); g.arc(98 * k, 98 * k, 24 * k, 0, 7); g.fillStyle = "#F97316"; g.fill(); // ring
-      g.beginPath(); g.arc(98 * k, 98 * k, 19 * k, 0, 7); g.fillStyle = dot; g.fill();       // status dot
+      const circ = (cx, cy, r) => { g.beginPath(); g.arc(cx * k, cy * k, r * k, 0, 7); };
+      // Big bulb, no background box: the glyph fills the toolbar cell like most extension icons.
+      g.fillStyle = "#F97316";
+      circ(64, 46, 42); g.fill();                                           // glass
+      rr(46, 76, 36, 14, 4); g.fill();                                      // neck
+      rr(43, 86, 42, 28, 9); g.fill();                                      // screw base
+      g.fillStyle = "#C2410C"; for (const ty of [95, 104]) { rr(43, ty, 42, 3.2, 1.6); g.fill(); } // threads
+      g.fillStyle = "#fff"; circ(50, 32, 8); g.fill();                      // glint
+      circ(101, 101, 26); g.fillStyle = "#fff"; g.fill();                   // ring around the status dot
+      circ(101, 101, 21); g.fillStyle = dot; g.fill();                      // status dot
       imageData[S] = g.getImageData(0, 0, S, S);
     } catch {}
   }
