@@ -1494,14 +1494,15 @@ const handlers = {
   // пометки notranslate на DOMContentLoaded (проверено: перевод не запускается);
   // on — снимаем регистрацию. reload — перезагрузить вкладку, чтобы применить сразу.
   async translation({ mode = "status", tabId, reload = true }) {
-    const ID = "claude-no-translate";
-    const registered = async () => (await chrome.scripting.getRegisteredContentScripts({ ids: [ID] })).length > 0;
+    const ID = "yx-no-translate", OLD_ID = "claude-no-translate"; // OLD_ID: installs registered before the rename
+    const registeredIds = async () => (await chrome.scripting.getRegisteredContentScripts({ ids: [ID, OLD_ID] })).map((s) => s.id);
+    const registered = async () => (await registeredIds()).length > 0;
     if (mode === "off" && !(await registered())) {
       await chrome.scripting.registerContentScripts([
         { id: ID, matches: ["<all_urls>"], js: ["notranslate.js"], runAt: "document_end", allFrames: true, persistAcrossSessions: true },
       ]);
     } else if (mode === "on" && (await registered())) {
-      await chrome.scripting.unregisterContentScripts({ ids: [ID] });
+      await chrome.scripting.unregisterContentScripts({ ids: await registeredIds() });
     }
     let tab = null;
     if (mode !== "status" && reload) {
@@ -1761,7 +1762,7 @@ const handlers = {
   },
 
   // ---- user-facing ----
-  async notify({ title = "Claude", message, iconUrl }) {
+  async notify({ title = "YX Bridge", message, iconUrl }) {
     const id = await chrome.notifications.create({ type: "basic", iconUrl: iconUrl || chrome.runtime.getURL("icon.png"), title, message });
     return { id };
   },

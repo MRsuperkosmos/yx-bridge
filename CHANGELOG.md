@@ -12,6 +12,7 @@ Hardening done during the release review:
 - The statistics page escapes domain names, so an imported file cannot inject markup.
 - Passwords are generated from a cryptographic random source (server and popup).
 - The MCP handshake reports the real package version; CSV export groups multi-part TLDs (co.uk) like the extension.
+- Installer fixes: the one-click Windows installer no longer aborts when a tool writes to stderr (a PowerShell 5.1 quirk that crashed it at the Claude Code registration and connection-check steps); the Claude Code config is read as UTF-8 and written without a BOM (Node cannot parse JSON with a BOM); the manual hint now says `chrome://extensions` (in Yandex Browser `browser://extensions` opens the catalog); the skip-pause variable is `YX_BRIDGE_NOPAUSE`. Leftovers of the project's old name were removed from the code (default notification title, content-script id, test strings, tool descriptions).
 - New offline test `server/test-auth.mjs` for the connection/password rules.
 
 ## 0.9.6 — 12 Sep

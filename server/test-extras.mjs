@@ -37,7 +37,7 @@ try {
   await step("set_viewport clear", () => call("set_viewport", { tabId: t.id, width: 0 }));
   await step("dialogs accept", async () => { await call("dialogs", { tabId: t.id, mode: "accept" }); await call("eval", { tabId: t.id, code: "return confirm('cb test')" }); return call("dialogs", { tabId: t.id, mode: "off" }); });
   await step("cdp_detach", () => call("cdp_detach", { tabId: t.id }));
-  await step("fill_form (yandex)", async () => { const y = await call("open_tab", { url: "https://ya.ru", active: true }); await call("wait_load", { tabId: y.id }); await sleep(2000); const r = await call("fill_form", { tabId: y.id, fields: { "input[name=text]": "claude bridge test" } }); await call("close_tab", { tabId: y.id }); return r; });
+  await step("fill_form (yandex)", async () => { const y = await call("open_tab", { url: "https://ya.ru", active: true }); await call("wait_load", { tabId: y.id }); await sleep(2000); const r = await call("fill_form", { tabId: y.id, fields: { "input[name=text]": "yx bridge test" } }); await call("close_tab", { tabId: y.id }); return r; });
   await step("history_search", () => call("history_search", { text: "iana", maxResults: 3 }).then((h) => h.length));
   await step("bookmark add/remove", async () => { const bm = await call("bookmark_add", { title: "[cb-test]", url: "https://example.com/cb" }); const found = await call("bookmarks_search", { query: "cb-test" }); await call("bookmark_remove", { id: bm.id }); return { added: bm.id, found: found.length }; });
   await step("download", () => call("download", { url: "https://www.iana.org/_img/2022/iana-logo-header.svg", filename: "yx-bridge-test/iana.svg" }, 60000));

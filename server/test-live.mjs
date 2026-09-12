@@ -18,14 +18,14 @@ try {
   show("query", await call("query", { tabId: id, selector: "h1, a", limit: 5 }));
   show("links", await call("links", { tabId: id }));
   show("eval main", await call("eval", { tabId: id, code: 'return {title: document.title, h1: document.querySelector("h1").textContent, loc: location.href}', world: "main" }));
-  show("set_html", await call("set_html", { tabId: id, selector: "h1", html: "Claude was here ✅" }));
+  show("set_html", await call("set_html", { tabId: id, selector: "h1", html: "YX Bridge was here ✅" }));
   show("set_style", await call("set_style", { tabId: id, selector: "h1", styles: { color: "red" } }));
   show("inject_css", await call("inject_css", { tabId: id, css: "body{background:#ffe}" }));
   show("eval again", await call("eval", { tabId: id, code: 'return document.querySelector("h1").textContent' }));
   show("get_html", await call("get_html", { tabId: id, selector: "h1", maxChars: 200 }));
-  show("find_text", await call("find_text", { tabId: id, text: "Claude" }));
+  show("find_text", await call("find_text", { tabId: id, text: "YX Bridge" }));
   show("tables", await call("tables", { tabId: id }));
-  show("wait_for", await call("wait_for", { tabId: id, selector: "h1", text: "Claude", timeoutMs: 3000 }));
+  show("wait_for", await call("wait_for", { tabId: id, selector: "h1", text: "YX Bridge", timeoutMs: 3000 }));
   show("click", await call("click", { tabId: id, selector: "a" }));
   await new Promise((r) => setTimeout(r, 2500));
   show("after click", await call("get_page", { tabId: id, maxChars: 80 }));

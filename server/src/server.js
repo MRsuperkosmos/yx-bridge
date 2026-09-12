@@ -404,7 +404,7 @@ const tools = [
   },
   {
     name: "browser_image_view",
-    description: "Fetch an image from inside the page (with the page's cookies, so protected images work), downscale it and return it to Claude as an image to look at. Also saves a copy to disk. url from browser_media_list. maxSide default 1280.",
+    description: "Fetch an image from inside the page (with the page's cookies, so protected images work), downscale it and return it to the agent as an image to look at. Also saves a copy to disk. url from browser_media_list. maxSide default 1280.",
     inputSchema: obj({ tabId: TAB, url: S("string"), maxSide: S("number"), quality: S("number"), saveTo: S("string") }, ["url"]),
     run: async (a) => {
       const r = await bridge.call("image_view", a, { timeoutMs: 45000 });
@@ -437,7 +437,7 @@ const tools = [
   },
   {
     name: "browser_video_frames",
-    description: "Grab frames from a <video> on the page at given times (seconds; default 10/30/50/70/90% of duration) and return them to Claude as images, so it can 'watch' the video. Works for same-origin and MSE players (YouTube, VK, Rutube); cross-origin files without CORS return an error per frame. Saves frames to disk too.",
+    description: "Grab frames from a <video> on the page at given times (seconds; default 10/30/50/70/90% of duration) and return them to the agent as images, so it can 'watch' the video. Works for same-origin and MSE players (YouTube, VK, Rutube); cross-origin files without CORS return an error per frame. Saves frames to disk too.",
     inputSchema: obj({ tabId: TAB, selector: S("string"), times: S("array", { items: S("number") }), maxSide: S("number", { description: "default 960" }), quality: S("number") }),
     run: async (a) => {
       const r = await bridge.call("video_frames", a, { timeoutMs: 90000 });

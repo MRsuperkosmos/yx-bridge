@@ -1,4 +1,4 @@
-# YX Bridge
+﻿# YX Bridge
 # Copyright 2026 MRsuperkosmos. Created 12 September 2026.
 # Licensed under the Apache License, Version 2.0. See LICENSE and NOTICE.
 

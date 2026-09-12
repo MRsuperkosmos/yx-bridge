@@ -22,7 +22,7 @@ Below, `<ROOT>` is that folder.
 
 ## 2. Run the installer (Windows)
 ```
-set CLAUDE_BRIDGE_NOPAUSE=1
+set YX_BRIDGE_NOPAUSE=1
 powershell -NoProfile -ExecutionPolicy Bypass -File "<ROOT>\Install-YXBridge.ps1"
 ```
 Options: `-Browser yandex|chrome|edge` (default auto), `-NoBrowser` (skip extension), `-NoNode`.
@@ -73,7 +73,7 @@ You MUST then: (1) save that password to your own memory; (2) tell the user the 
 - `cd <ROOT>/server && node src/selftest.js` → must print `mcp tools: 111 ...`.
 - After restarting the agent, call the tool `browser_status`. Expect `connected: true`.
   If `connected: false`: the browser must be running with the "YX Bridge" extension enabled
-  (badge `on` on the orange "C" icon). Only one agent can hold port 17555 at a time.
+  (the dot in the corner of the light-bulb icon turns green). Only one agent can hold port 17555 at a time.
 - Optional live checks: `node test-live.mjs`, `node test-translate.mjs`, `node test-media.mjs` (they open
   their own tabs in a spare window and close them).
 
@@ -84,7 +84,7 @@ choose `<ROOT>/extension`. That is the only step that cannot be automated outsid
 
 ## 6. Uninstall
 ```
-set CLAUDE_BRIDGE_NOPAUSE=1
+set YX_BRIDGE_NOPAUSE=1
 powershell -NoProfile -ExecutionPolicy Bypass -File "<ROOT>\Uninstall-YXBridge.ps1"
 ```
 Removes the Claude Code registration and removes the extension from the browser via UI Automation.
@@ -121,7 +121,7 @@ License: Apache 2.0, Copyright 2026 MRsuperkosmos (see LICENSE, NOTICE).
 
 ## 2. Запустить установщик (Windows)
 ```
-set CLAUDE_BRIDGE_NOPAUSE=1
+set YX_BRIDGE_NOPAUSE=1
 powershell -NoProfile -ExecutionPolicy Bypass -File "<ROOT>\Install-YXBridge.ps1"
 ```
 Ключи: `-Browser yandex|chrome|edge` (по умолчанию auto), `-NoBrowser` (пропустить расширение), `-NoNode`.
@@ -173,7 +173,7 @@ args = ["<ROOT>/server/src/server.js"]
 - `cd <ROOT>/server && node src/selftest.js` → должно напечатать `mcp tools: 111 ...`.
 - После перезапуска агента вызови инструмент `browser_status`. Ожидается `connected: true`.
   Если `connected: false`: браузер должен быть запущен с включённым расширением «YX Bridge»
-  (бейдж `on` на оранжевой иконке «C»). Порт 17555 может держать только один агент за раз.
+  (кружок в углу иконки-лампочки становится зелёным). Порт 17555 может держать только один агент за раз.
 - Необязательные живые проверки: `node test-live.mjs`, `node test-translate.mjs`, `node test-media.mjs`
   (открывают свои вкладки в свободном окне и закрывают их).
 
@@ -184,7 +184,7 @@ args = ["<ROOT>/server/src/server.js"]
 
 ## 6. Удаление
 ```
-set CLAUDE_BRIDGE_NOPAUSE=1
+set YX_BRIDGE_NOPAUSE=1
 powershell -NoProfile -ExecutionPolicy Bypass -File "<ROOT>\Uninstall-YXBridge.ps1"
 ```
 Снимает регистрацию в Claude Code и удаляет расширение из браузера через UI Automation.

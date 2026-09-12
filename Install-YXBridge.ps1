@@ -17,7 +17,10 @@ param(
   [switch]$NoBrowser,     # только сервер + регистрация, расширение не трогать
   [switch]$NoNode         # не пытаться ставить Node.js
 )
-$ErrorActionPreference = "Stop"
+# "Continue", not "Stop": in Windows PowerShell 5.1 a native program (claude, node, npm) writing to
+# stderr under 2>$null / 2>&1 becomes a terminating error and would abort the whole install.
+# Every important step below checks its own result explicitly instead.
+$ErrorActionPreference = "Continue"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ext = Join-Path $root "extension"
@@ -74,7 +77,8 @@ if (-not $registered) {
     $entry = [pscustomobject]@{ type = "stdio"; command = "node"; args = @($server); env = [pscustomobject]@{} }
     if ($j.mcpServers.PSObject.Properties["yx-bridge"]) { $j.mcpServers."yx-bridge" = $entry } else { $j.mcpServers | Add-Member -MemberType NoteProperty -Name "yx-bridge" -Value $entry }
     if (Test-Path $cfg) { Copy-Item $cfg "$cfg.bak-yx-bridge" -Force }
-    $j | ConvertTo-Json -Depth 60 | Set-Content $cfg -Encoding utf8
+    # UTF-8 without BOM: Node/Claude Code cannot parse a JSON file that starts with a BOM.
+    [IO.File]::WriteAllText($cfg, ($j | ConvertTo-Json -Depth 60), (New-Object System.Text.UTF8Encoding $false))
     $registered = $true
   } catch { Fail "не удалось записать $cfg : $_" }
 }
@@ -153,9 +157,9 @@ Push-Location (Join-Path $root "server")
 $ping = & node src/cli.js ping 2>$null | Out-String
 Pop-Location
 if ($ping -match '"pong": true') { Ok ("расширение отвечает, версия " + ($ping | Select-String -Pattern '"version": "([^"]+)"' | ForEach-Object { $_.Matches[0].Groups[1].Value })) }
-else { Warn "расширение не ответило за 20 с. Если Claude Code уже запущен, порт занят им — это нормально. Иначе проверьте бейдж на иконке «C» после перезапуска Claude Code." }
+else { Warn "расширение не ответило за 20 с. Если Claude Code уже запущен, порт занят им — это нормально. Иначе после перезапуска Claude Code посмотрите на кружок в углу иконки-лампочки: зелёный = подключено." }
 
 Write-Host ""
 Write-Host "Готово. Перезапустите Claude Code — появятся инструменты browser_*." -ForegroundColor Green
 Write-Host "Отчёт:"; $log | ForEach-Object { "  $_" }
-if (-not $env:CLAUDE_BRIDGE_NOPAUSE) { Read-Host "Enter для выхода" | Out-Null }
+if (-not $env:YX_BRIDGE_NOPAUSE) { Read-Host "Enter для выхода" | Out-Null }

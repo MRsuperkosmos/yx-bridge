@@ -26,5 +26,5 @@ echo "3/3 Самопроверка..."
 (cd "$ROOT/server" && node src/selftest.js)
 
 echo
-echo "Готово. Загрузите расширение: browser://extensions -> Режим разработчика ->"
+echo "Готово. Загрузите расширение: chrome://extensions (в Яндексе набрать именно так) -> Режим разработчика ->"
 echo "Загрузить распакованное расширение -> $ROOT/extension, затем перезапустите Claude Code."

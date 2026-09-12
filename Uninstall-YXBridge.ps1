@@ -20,7 +20,7 @@ $cfg = Join-Path $env:USERPROFILE ".claude.json"
 if (Test-Path $cfg) {
   try {
     $j = Get-Content $cfg -Raw -Encoding utf8 | ConvertFrom-Json
-    if ($j.mcpServers -and $j.mcpServers.PSObject.Properties["yx-bridge"]) { $j.mcpServers.PSObject.Properties.Remove("yx-bridge"); $j | ConvertTo-Json -Depth 60 | Set-Content $cfg -Encoding utf8 }
+    if ($j.mcpServers -and $j.mcpServers.PSObject.Properties["yx-bridge"]) { $j.mcpServers.PSObject.Properties.Remove("yx-bridge"); [IO.File]::WriteAllText($cfg, ($j | ConvertTo-Json -Depth 60), (New-Object System.Text.UTF8Encoding $false)) }
     Ok "регистрация в Claude Code снята"
   } catch { Warn "не удалось править $cfg : $_" }
 }
@@ -39,9 +39,9 @@ $extPage = if ($target.key -eq "edge") { "edge://extensions" } else { "chrome://
 Start-Process $target.path -ArgumentList "--new-window", $extPage | Out-Null
 Start-Sleep -Seconds 4
 function Chain($steps, $timeout = 10000, $web = $true) {
-  $args = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $uia, "chain", "-Steps", $steps, "-TimeoutMs", $timeout, "-ProcessName", $target.proc)
-  if ($web) { $args += "-IncludeWeb" }
-  $raw = & powershell @args 2>$null
+  $psArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $uia, "chain", "-Steps", $steps, "-TimeoutMs", $timeout, "-ProcessName", $target.proc)
+  if ($web) { $psArgs += "-IncludeWeb" }
+  $raw = & powershell @psArgs 2>$null
   try { return ($raw | Out-String | ConvertFrom-Json) } catch { return @() }
 }
 $r = Chain 'wait:^(Расширения|Extensions)$;list:^YX Bridge$;list:^(Удалить|Remove)$' 15000
@@ -60,4 +60,4 @@ $check = Chain 'list:^YX Bridge$' 5000
 $still = ($check | ForEach-Object { $_.found } | Where-Object { $_.type -eq "Text" }).Count
 if ($still -eq 0) { Ok "расширение удалено из браузера" } else { Warn "расширение всё ещё в списке; подтвердите удаление вручную" }
 Write-Host "Готово. Папку проекта можно удалить вручную." -ForegroundColor Green
-if (-not $env:CLAUDE_BRIDGE_NOPAUSE) { Read-Host "Enter для выхода" | Out-Null }
+if (-not $env:YX_BRIDGE_NOPAUSE) { Read-Host "Enter для выхода" | Out-Null }
