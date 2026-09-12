@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YX Bridge",
-  "version": "0.9.6",
+  "version": "1.0.0",
   "author": "MRsuperkosmos",
   "description": "Local MCP bridge for AI agents: read open pages, edit the DOM, run JS, screenshots, media, CDP, translation control, browsing stats.",
   "permissions": [

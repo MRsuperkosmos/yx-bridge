@@ -2,6 +2,9 @@
 
 All notable changes to YX Bridge. Dates are 2026.
 
+## 1.0.0 — 12 Sep
+First stable public release. YX Bridge is a browser extension plus a local MCP server that gives an AI agent access to your open tabs: read pages, edit the DOM, run JS, take screenshots, read media, send raw DevTools commands, control Yandex Browser's auto-translation, and drive the browser UI (Windows). 254 tools. Optional local password on the port, a pause kill-switch, and browsing statistics (local-time hourly chart, time zone, JSON/CSV export). Bilingual EN/RU interface. Apache-2.0.
+
 ## 0.9.6 — 12 Sep
 - **Statistics record and show your time zone.** The extension reads your device's zone (e.g. Europe/Amsterdam, UTC+2), stores it with the data, shows it on the statistics page next to `Tracking since`, and reports it to the agent. Day and hour counting already runs in that zone.
 

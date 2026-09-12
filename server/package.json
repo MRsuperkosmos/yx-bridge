@@ -1,6 +1,6 @@
 {
   "name": "yx-bridge-mcp",
-  "version": "0.9.6",
+  "version": "1.0.0",
   "description": "MCP server that drives a Chromium browser (Yandex Browser, Chrome, Edge) through the YX Bridge extension: read open pages, manipulate DOM, run JS, screenshots, media, raw CDP, translation control, browser UI automation, and browsing statistics. 250+ tools.",
   "type": "module",
   "main": "src/server.js",
