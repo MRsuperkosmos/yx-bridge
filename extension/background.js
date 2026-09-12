@@ -26,34 +26,33 @@ const localDay = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() +
 // so the data is self-describing and the page/agent can label it correctly.
 function tzStamp(s) { try { s.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null; } catch { s.tz = null; } s.tzOffsetMin = -new Date().getTimezoneOffset(); return s; }
 
-// Draw the toolbar icon: a big orange bulb (no background box), with a status dot in the corner —
+// Toolbar icon = the bundled bulb artwork (icon16/32/48.png) plus a status dot drawn in the corner —
 // green = connected, red = not connected, yellow = paused by the user.
-function paintIcon() {
+const ICON_BITMAPS = {}; // size -> ImageBitmap, decoded once
+async function iconBitmap(S) {
+  if (!ICON_BITMAPS[S]) {
+    const res = await fetch(chrome.runtime.getURL(`icon${S}.png`));
+    ICON_BITMAPS[S] = await createImageBitmap(await res.blob());
+  }
+  return ICON_BITMAPS[S];
+}
+let paintSeq = 0;
+async function paintIcon() {
   const dot = paused ? "#F5C518" : status.connected ? "#2ECC71" : "#E5484D";
+  const seq = ++paintSeq;
   const imageData = {};
   for (const S of [16, 32, 48]) {
     try {
       const g = new OffscreenCanvas(S, S).getContext("2d");
+      g.drawImage(await iconBitmap(S), 0, 0, S, S);
       const k = S / 128;
-      const rr = (x, y, w, h, r) => {
-        const X = x * k, Y = y * k, Wd = w * k, H = h * k, R = r * k;
-        g.beginPath();
-        if (g.roundRect) g.roundRect(X, Y, Wd, H, R);
-        else { g.moveTo(X + R, Y); g.arcTo(X + Wd, Y, X + Wd, Y + H, R); g.arcTo(X + Wd, Y + H, X, Y + H, R); g.arcTo(X, Y + H, X, Y, R); g.arcTo(X, Y, X + Wd, Y, R); g.closePath(); }
-      };
       const circ = (cx, cy, r) => { g.beginPath(); g.arc(cx * k, cy * k, r * k, 0, 7); };
-      // Big bulb, no background box: the glyph fills the toolbar cell like most extension icons.
-      g.fillStyle = "#F97316";
-      circ(64, 46, 42); g.fill();                                           // glass
-      rr(46, 76, 36, 14, 4); g.fill();                                      // neck
-      rr(43, 86, 42, 28, 9); g.fill();                                      // screw base
-      g.fillStyle = "#C2410C"; for (const ty of [95, 104]) { rr(43, ty, 42, 3.2, 1.6); g.fill(); } // threads
-      g.fillStyle = "#fff"; circ(50, 32, 8); g.fill();                      // glint
-      circ(101, 101, 26); g.fillStyle = "#fff"; g.fill();                   // ring around the status dot
-      circ(101, 101, 21); g.fillStyle = dot; g.fill();                      // status dot
+      circ(102, 102, 25); g.fillStyle = "#fff"; g.fill();   // white ring so the dot stands out
+      circ(102, 102, 20); g.fillStyle = dot; g.fill();      // status dot
       imageData[S] = g.getImageData(0, 0, S, S);
     } catch {}
   }
+  if (seq !== paintSeq) return; // a newer state was painted meanwhile
   try { if (Object.keys(imageData).length) chrome.action.setIcon({ imageData }).catch(() => {}); } catch {}
 }
 
