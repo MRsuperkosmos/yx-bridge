@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>YX Bridge — статистика</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f7f9; --card: #ffffff; --fg: #1a1c20; --muted: #8a8f98; --line: #ececf0;
+    --accent: #d97757; --accent2: #e08a6f; --chip: #f0f0f4;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #17181c; --card: #1f2126; --fg: #eceef2; --muted: #868b94; --line: #2b2e35; --chip: #282b31; --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); }
+  }
+  :root[data-theme="dark"] { --bg: #17181c; --card: #1f2126; --fg: #eceef2; --muted: #868b94; --line: #2b2e35; --chip: #282b31; --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); }
+  * { box-sizing: border-box; }
+  body { font: 14px/1.5 -apple-system, "Segoe UI", system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--fg); padding: 32px 20px 60px; }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  .top { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .logo { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 16px; box-shadow: 0 2px 10px rgba(217,119,87,.35); }
+  h1 { font-size: 21px; margin: 0; }
+  .sub { color: var(--muted); margin: 2px 0 22px; font-size: 13px; }
+  .theme { margin-left: 8px; display: flex; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+  .theme button { border: none; background: transparent; padding: 6px 8px; border-radius: 7px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .theme button:hover { color: var(--fg); } .theme button.sel { background: var(--chip); color: var(--accent); }
+  .theme svg { width: 15px; height: 15px; }
+  .lang { margin-left: auto; display: flex; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+  .lang button { border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; padding: 6px 9px; border-radius: 7px; cursor: pointer; }
+  .lang button:hover { color: var(--fg); } .lang button.sel { background: var(--chip); color: var(--accent); }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 26px; }
+  @media (max-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 15px 16px; box-shadow: var(--shadow); }
+  .card .n { font-size: 24px; font-weight: 750; letter-spacing: -.5px; }
+  .card .l { color: var(--muted); font-size: 11.5px; margin-top: 3px; text-transform: uppercase; letter-spacing: .4px; }
+  h3 { font-size: 14px; margin: 26px 0 12px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  h3 .pill { font-weight: 500; font-size: 12px; color: var(--muted); text-transform: none; letter-spacing: 0; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .range { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .range input[type=date] { font: inherit; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  .range .presets { display: flex; gap: 4px; background: var(--chip); border: 1px solid var(--line); border-radius: 9px; padding: 3px; margin-left: auto; }
+  .range .presets button { border: none; background: transparent; color: var(--muted); padding: 6px 11px; border-radius: 7px; cursor: pointer; font: inherit; font-size: 12.5px; }
+  .range .presets button:hover { color: var(--fg); } .range .presets button.sel { background: var(--card); color: var(--accent); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  tr:last-child td { border-bottom: none; }
+  th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+  td.dom { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { padding-left: 18px; } th:last-child, td:last-child { padding-right: 18px; }
+  col.c-time { width: 110px; } col.c-bar { width: 190px; } col.c-visits { width: 130px; }
+  .scroll { max-height: 452px; overflow-y: auto; overflow-x: hidden; }
+  thead th { position: sticky; top: 0; background: var(--card); z-index: 1; }
+  .search { flex: 1; min-width: 180px; font: inherit; padding: 8px 12px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  .count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .bar { height: 7px; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 4px; }
+  .muted { color: var(--muted); }
+  .daybars { display: flex; align-items: flex-end; gap: 3px; height: 96px; margin: 4px 0 8px; }
+  .daybar { flex: 1; background: linear-gradient(180deg, var(--accent2), var(--accent)); border-radius: 4px 4px 0 0; min-height: 3px; transition: height .3s; }
+  .daybar:hover { filter: brightness(1.12); }
+  .chartlabels { display: flex; gap: 3px; margin-top: 3px; }
+  .clab { flex: 1; text-align: center; font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+  .btns { margin-top: 24px; display: flex; gap: 10px; }
+  .btns button { font: inherit; font-weight: 600; padding: 9px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; }
+  .btns button:hover { background: var(--chip); } .btns .danger { color: #e5484d; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">YX</div>
+    <div><h1 data-i18n="stats_title">Browser statistics</h1></div>
+    <div class="lang" id="lang"><button data-l="en">EN</button><button data-l="ru">RU</button></div>
+    <div class="theme" id="theme">
+      <button data-t="auto" title="Auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/></svg></button>
+      <button data-t="light" title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button data-t="dark" title="Dark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    </div>
+  </div>
+  <div class="sub" id="since"></div>
+
+  <div class="cards">
+    <div class="card"><div class="n" id="pDay">—</div><div class="l" data-i18n="card_day">past day</div></div>
+    <div class="card"><div class="n" id="pWeek">—</div><div class="l" data-i18n="card_week">past week</div></div>
+    <div class="card"><div class="n" id="pMonth">—</div><div class="l" data-i18n="card_month">past month</div></div>
+    <div class="card"><div class="n" id="pYear">—</div><div class="l" data-i18n="card_year">past year</div></div>
+  </div>
+
+  <h3><span id="chartTitle" data-i18n="chart_t_month">By day, last 30</span></h3>
+  <div class="range" style="margin-bottom:12px">
+    <div class="presets" id="chartPeriod" style="margin-left:0">
+      <button data-c="day" data-i18n="preset_day">Day</button>
+      <button data-c="week" data-i18n="preset_week">Week</button>
+      <button data-c="month" class="sel" data-i18n="preset_month">Month</button>
+      <button data-c="year" data-i18n="preset_year">Year</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="daybars" id="daybars"></div>
+    <div class="chartlabels" id="chartLabels"></div>
+    <div class="sub" id="dayrange" style="margin:8px 0 0"></div>
+  </div>
+
+  <h3><span data-i18n="activity_title">Activity by site</span> <span class="pill" id="rangeLabel"></span></h3>
+  <div class="range">
+    <label><span data-i18n="range_from">from</span> <input type="date" id="from"></label>
+    <label><span data-i18n="range_to">to</span> <input type="date" id="to"></label>
+    <div class="presets" id="presets">
+      <button data-d="1" data-i18n="preset_day">Day</button>
+      <button data-d="7" data-i18n="preset_week">Week</button>
+      <button data-d="30" class="sel" data-i18n="preset_month">Month</button>
+      <button data-d="365" data-i18n="preset_year">Year</button>
+      <button data-d="0" data-i18n="preset_all">All</button>
+    </div>
+  </div>
+  <div class="range" style="margin-bottom:12px">
+    <span class="muted" style="font-size:12.5px" data-i18n="group_label">Group by:</span>
+    <div class="presets" id="grouping" style="margin-left:0">
+      <button data-g="host" data-i18n="group_sub" data-i18n-title="group_sub_title">Subdomains</button>
+      <button data-g="main" class="sel" data-i18n="group_main" data-i18n-title="group_main_title">Main domain</button>
+    </div>
+  </div>
+  <div class="range" style="margin-bottom:12px">
+    <input type="search" id="siteSearch" class="search" data-i18n-ph="search_ph" placeholder="Search by domain — how long you spent on it…">
+    <span class="count" id="rangeCount"></span>
+  </div>
+  <div class="panel" style="padding:0"><div class="scroll"><table><colgroup><col><col class="c-time"><col class="c-bar"></colgroup><thead><tr><th id="siteColHead" style="padding-left:18px">Site (main domain)</th><th class="num" data-i18n="col_time">Time</th><th></th></tr></thead><tbody id="rangeSites"></tbody></table></div></div>
+
+  <h3><span data-i18n="top_title">Most visited sites</span> <span class="pill" data-i18n="top_sub">all time · by main domain</span></h3>
+  <div class="panel" style="padding:0"><div class="scroll"><table><colgroup><col><col class="c-visits"><col class="c-time"></colgroup><thead><tr><th id="topSiteHead" style="padding-left:18px" data-i18n="col_site">Site</th><th class="num" data-i18n="col_visits">Visits</th><th class="num" style="padding-right:18px" data-i18n="col_time">Time</th></tr></thead><tbody id="topVisits"></tbody></table></div></div>
+
+  <div class="btns">
+    <button id="refresh" data-i18n="btn_refresh">Refresh</button>
+    <button id="exportJson" data-i18n="btn_export_json">Export JSON</button>
+    <button id="exportCsv" data-i18n="btn_export_csv">Export CSV</button>
+    <button id="import" data-i18n="btn_import">Import</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+    <button id="reset" class="danger" data-i18n="btn_reset">Reset statistics</button>
+  </div>
+  <div class="sub" id="ioMsg" style="margin-top:10px"></div>
+</div>
+  <script src="i18n.js"></script>
+  <script src="stats.js"></script>
+</body>
+</html>

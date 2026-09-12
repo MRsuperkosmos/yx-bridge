@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+server/node_modules/
+
+# YX Bridge connection password — never commit
+server/.token
+.token
+
+# local test artifacts / agent outputs
+*.log
+server/cli-shot.png
+cli-shot.png
+media-test/
+server/media-test/
+*.tmp
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# backups
+*.bak
+*.bak-*

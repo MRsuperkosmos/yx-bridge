@@ -1,0 +1,133 @@
+// YX Bridge — shared i18n for the popup and stats pages. Default English, toggle to Russian.
+const I18N = {
+  en: {
+    app_sub: "browser ⇄ AI agent",
+    state_connected: "Connected to agent",
+    state_disconnected: "Not connected",
+    state_paused: "AI paused",
+    kv_server: "Server", kv_handled: "Commands run", kv_debugger: "Debugger on tabs",
+    attached_none: "none",
+    err_wrong_password: "Wrong password — the extension and server don't match.",
+    err_paused: "AI agent paused by you in the extension (data transfer is off).",
+    err_not_connected: "Start Claude Code — the server comes up on its own.",
+    pause_title: "AI agent", pause_on: "data is flowing", pause_off: "paused — commands blocked",
+    pw_title: "Connection password",
+    pw_none: "not set — the port is open", pw_set: "set — only this extension can connect",
+    pw_change: "Change", pw_hide: "Hide",
+    pw_reveal_title: "Show password", pw_conceal_title: "Hide password", pw_copy_title: "Copy", pw_copied: "Copied",
+    pw_ph: "New password (blank = generate)", pw_save: "Save", pw_clear: "Remove password",
+    pw_saved: (p) => "Password saved: " + p + " (write it down)",
+    pw_removed: "Password removed — the port is open again.",
+    pw_error: (e) => "Error: " + e,
+    btn_stats: "Browser statistics", btn_reconnect: "Reconnect",
+    foot_tools: "254 tools",
+    // stats
+    stats_title: "Browser statistics",
+    since: (d) => "Tracking since " + d, since_empty: "No data yet — browse a bit.",
+    tz_label: (name, off) => "Time zone: " + name + " (" + off + ")",
+    card_day: "past day", card_week: "past week", card_month: "past month", card_year: "past year",
+    byday_title: "By day (last 30)",
+    dayrange: (a, b, max) => `${a} … ${b} (max ${max}/day)`,
+    chart_t_day: "Today, by hour", chart_t_week: "By day, last 7 days", chart_t_month: "By day, last 30 days", chart_t_year: "By month, last 12 months",
+    active_window: (a, b) => `Active from ${a} to ${b}`, active_peak: (p) => `busiest hour ${p}`, active_none: "No activity today yet",
+    chart_total: (t, m) => `Total ${t} · busiest bar ${m}`,
+    activity_title: "Activity by site",
+    range_label: (a, b, total) => `${a} … ${b} · total ${total}`,
+    range_from: "from", range_to: "to", range_start: "start", range_today: "today",
+    preset_day: "Day", preset_week: "Week", preset_month: "Month", preset_year: "Year", preset_all: "All",
+    group_label: "Group by:", group_sub: "Subdomains", group_main: "Main domain",
+    group_sub_title: "Each subdomain separately (m.youtube.com, docs.github.com)",
+    group_main_title: "Registrable domain: docs.github.com → github.com",
+    search_ph: "Search by domain — how long you spent on it…",
+    count_domains: (n) => n + " domain" + (n === 1 ? "" : "s") + (n > 10 ? " · scroll the list" : ""),
+    count_found: (n) => "found " + n,
+    col_site_sub: "Site (subdomains)", col_site_main: "Site (main domain)",
+    col_time: "Time", col_site: "Site", col_visits: "Visits",
+    empty_range: (q) => (q ? `Nothing found for «${q}»` : "No data for this period"),
+    top_title: "Most visited sites", top_sub: "all time",
+    empty_top: "No data",
+    btn_refresh: "Refresh", btn_export_json: "Export JSON", btn_export_csv: "Export CSV", btn_import: "Import", btn_reset: "Reset statistics",
+    io_json: "JSON saved — a full dump you can import on another device.",
+    io_csv: "CSV saved — great to share your screen time or open in a spreadsheet.",
+    io_import_confirm: "Add to the current statistics? OK — merge, Cancel — replace.",
+    io_imported: "Import done.",
+    io_import_fail: (e) => "Import failed: " + e,
+    io_bad_file: "not a YX Bridge statistics file",
+    reset_confirm: "Reset all statistics?",
+    unit_d: "d", unit_h: "h", unit_min: "min",
+  },
+  ru: {
+    app_sub: "браузер ⇄ ИИ-агент",
+    state_connected: "Подключено к агенту",
+    state_disconnected: "Нет соединения",
+    state_paused: "ИИ приостановлен",
+    kv_server: "Сервер", kv_handled: "Команд выполнено", kv_debugger: "Отладчик на вкладках",
+    attached_none: "нет",
+    err_wrong_password: "Неверный пароль — расширение и сервер не совпадают.",
+    err_paused: "ИИ-агент приостановлен вами в расширении.",
+    err_not_connected: "Запустите Claude Code — сервер поднимется сам.",
+    pause_title: "ИИ-агент", pause_on: "данные передаются", pause_off: "приостановлен — команды блокируются",
+    pw_title: "Пароль подключения",
+    pw_none: "не установлен — порт открыт", pw_set: "установлен — подключается только это расширение",
+    pw_change: "Изменить", pw_hide: "Скрыть",
+    pw_reveal_title: "Показать пароль", pw_conceal_title: "Скрыть пароль", pw_copy_title: "Копировать", pw_copied: "Скопировано",
+    pw_ph: "Новый пароль (пусто — сгенерировать)", pw_save: "Сохранить", pw_clear: "Снять пароль",
+    pw_saved: (p) => "Пароль сохранён: " + p + " (запишите его)",
+    pw_removed: "Пароль снят — порт снова открыт.",
+    pw_error: (e) => "Ошибка: " + e,
+    btn_stats: "Статистика браузера", btn_reconnect: "Переподключить",
+    foot_tools: "254 инструмента",
+    stats_title: "Статистика браузера",
+    since: (d) => "Считается с " + d, since_empty: "Пока нет данных — походите по сайтам.",
+    tz_label: (name, off) => "Часовой пояс: " + name + " (" + off + ")",
+    card_day: "за день", card_week: "за неделю", card_month: "за месяц", card_year: "за год",
+    byday_title: "По дням (последние 30)",
+    dayrange: (a, b, max) => `${a} … ${b} (макс. ${max}/день)`,
+    chart_t_day: "Сегодня, по часам", chart_t_week: "По дням, за 7 дней", chart_t_month: "По дням, за 30 дней", chart_t_year: "По месяцам, за 12 месяцев",
+    active_window: (a, b) => `Активность с ${a} до ${b}`, active_peak: (p) => `пик в ${p}`, active_none: "Сегодня пока нет активности",
+    chart_total: (t, m) => `Всего ${t} · самый большой столбец ${m}`,
+    activity_title: "Активность по сайтам",
+    range_label: (a, b, total) => `${a} … ${b} · всего ${total}`,
+    range_from: "с", range_to: "по", range_start: "начало", range_today: "сегодня",
+    preset_day: "День", preset_week: "Неделя", preset_month: "Месяц", preset_year: "Год", preset_all: "Всё",
+    group_label: "Группировать:", group_sub: "Поддомены", group_main: "Основной домен",
+    group_sub_title: "Каждый поддомен отдельно (m.youtube.com, docs.github.com)",
+    group_main_title: "Основной домен: docs.github.com → github.com",
+    search_ph: "Поиск по домену — сколько времени на нём…",
+    count_domains: (n) => n + " " + plural_ru(n, "домен", "домена", "доменов") + (n > 10 ? " · листайте список" : ""),
+    count_found: (n) => "найдено " + n,
+    col_site_sub: "Сайт (поддомены)", col_site_main: "Сайт (основной домен)",
+    col_time: "Время", col_site: "Сайт", col_visits: "Визитов",
+    empty_range: (q) => (q ? `Ничего не найдено по «${q}»` : "За этот период нет данных"),
+    top_title: "Топ самых посещаемых сайтов", top_sub: "за всё время",
+    empty_top: "Нет данных",
+    btn_refresh: "Обновить", btn_export_json: "Экспорт JSON", btn_export_csv: "Экспорт CSV", btn_import: "Импорт", btn_reset: "Сбросить статистику",
+    io_json: "JSON сохранён — полный дамп, его можно импортировать на другом устройстве.",
+    io_csv: "CSV сохранён — удобно похвастаться экранным временем или открыть в таблице.",
+    io_import_confirm: "Добавить к текущей статистике? OK — объединить, Отмена — заменить.",
+    io_imported: "Импорт готов.",
+    io_import_fail: (e) => "Не удалось импортировать: " + e,
+    io_bad_file: "не похоже на файл статистики YX Bridge",
+    reset_confirm: "Сбросить всю статистику?",
+    unit_d: "д", unit_h: "ч", unit_min: "мин",
+  },
+};
+function plural_ru(n, one, few, many) { const m10 = n % 10, m100 = n % 100; if (m10 === 1 && m100 !== 11) return one; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few; return many; }
+let LANG = "en";
+function tr(key, ...args) { const d = I18N[LANG] || I18N.en; let s = key in d ? d[key] : (I18N.en[key] ?? key); return typeof s === "function" ? s(...args) : s; }
+async function loadLang() { try { LANG = (await chrome.storage.local.get("lang")).lang === "ru" ? "ru" : "en"; } catch { LANG = "en"; } return LANG; }
+function setLang(l) { LANG = l === "ru" ? "ru" : "en"; try { chrome.storage.local.set({ lang: LANG }); } catch {} }
+function applyStatic(root = document) {
+  for (const el of root.querySelectorAll("[data-i18n]")) el.textContent = tr(el.getAttribute("data-i18n"));
+  for (const el of root.querySelectorAll("[data-i18n-ph]")) el.setAttribute("placeholder", tr(el.getAttribute("data-i18n-ph")));
+  for (const el of root.querySelectorAll("[data-i18n-title]")) el.setAttribute("title", tr(el.getAttribute("data-i18n-title")));
+  document.documentElement.lang = LANG;
+}
+function wireLangToggle(onchange) {
+  document.querySelectorAll("#lang button").forEach((b) => b.classList.toggle("sel", b.dataset.l === LANG));
+  document.querySelectorAll("#lang button").forEach((b) => b.addEventListener("click", () => {
+    setLang(b.dataset.l);
+    document.querySelectorAll("#lang button").forEach((x) => x.classList.toggle("sel", x === b));
+    applyStatic(); if (onchange) onchange();
+  }));
+}
