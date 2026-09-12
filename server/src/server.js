@@ -19,8 +19,8 @@ import { Bridge } from "./bridge.js";
 import { locate, getTranslateSettings, applyTranslateSettings, closeBrowser, launchBrowser, isRunning } from "./profile.js";
 import { uiList, uiClick, uiChain, translateMenu, supported as uiSupported } from "./ui.js";
 
-const PORT = Number(process.env.BROWSER_BRIDGE_PORT || 17555);
-const SHOT_DIR = process.env.BROWSER_SHOT_DIR || path.join(os.tmpdir(), "yx-bridge-shots");
+const PORT = Number(process.env.YX_BRIDGE_PORT || 17555);
+const SHOT_DIR = process.env.YX_BRIDGE_SHOT_DIR || path.join(os.tmpdir(), "yx-bridge-shots");
 const log = (m) => process.stderr.write(`[yx-bridge] ${m}\n`);
 
 // Optional password so only the genuine extension (which stores the same password)

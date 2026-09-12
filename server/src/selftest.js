@@ -23,7 +23,7 @@ fake.close();
 bridge.close();
 
 // 2) MCP server over stdio: initialize + tools/list
-const proc = spawn(process.execPath, ["src/server.js"], { env: { ...process.env, BROWSER_BRIDGE_PORT: "17557" } });
+const proc = spawn(process.execPath, ["src/server.js"], { env: { ...process.env, YX_BRIDGE_PORT: "17557" } });
 let buf = "";
 const send = (o) => proc.stdin.write(JSON.stringify(o) + "\n");
 const got = new Promise((resolve) => {

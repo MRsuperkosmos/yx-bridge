@@ -39,7 +39,9 @@
   button:active { transform: translateY(1px); }
   button.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; box-shadow: 0 2px 10px rgba(217,119,87,.3); }
   button.primary:hover { filter: brightness(1.05); background: linear-gradient(135deg, var(--accent), var(--accent2)); }
-  .foot { border-top: 1px solid var(--line); padding: 9px 16px; color: var(--muted); font-size: 10.5px; display: flex; justify-content: space-between; }
+  .foot { border-top: 1px solid var(--line); padding: 9px 16px; color: var(--muted); font-size: 10.5px; display: flex; justify-content: space-between; align-items: center; }
+  .foot a { color: inherit; text-decoration: none; font-weight: 600; letter-spacing: .2px; }
+  .foot a:hover { color: var(--accent); }
   .ico { width: 15px; height: 15px; }
   .theme { margin-left: auto; display: flex; gap: 2px; background: var(--chip); border: 1px solid var(--line); border-radius: 9px; padding: 2px; }
   .theme button { border: none; background: transparent; padding: 5px 7px; border-radius: 7px; color: var(--muted); box-shadow: none; }
@@ -141,7 +143,7 @@
 
   <div class="foot">
     <div class="lang" id="lang"><button data-l="en">EN</button><button data-l="ru">RU</button></div>
-    <span id="tools" data-i18n="foot_tools">254 tools</span>
+    <a id="author" href="https://github.com/MRsuperkosmos/yx-bridge" target="_blank" rel="noopener" title="GitHub">MRsuperkosmos</a>
   </div>
   <script src="i18n.js"></script>
   <script src="popup.js"></script>

@@ -20,7 +20,6 @@ const I18N = {
     pw_removed: "Password removed — the port is open again.",
     pw_error: (e) => "Error: " + e,
     btn_stats: "Browser statistics", btn_reconnect: "Reconnect",
-    foot_tools: "254 tools",
     // stats
     stats_title: "Browser statistics",
     since: (d) => "Tracking since " + d, since_empty: "No data yet — browse a bit.",
@@ -76,7 +75,6 @@ const I18N = {
     pw_removed: "Пароль снят — порт снова открыт.",
     pw_error: (e) => "Ошибка: " + e,
     btn_stats: "Статистика браузера", btn_reconnect: "Переподключить",
-    foot_tools: "254 инструмента",
     stats_title: "Статистика браузера",
     since: (d) => "Считается с " + d, since_empty: "Пока нет данных — походите по сайтам.",
     tz_label: (name, off) => "Часовой пояс: " + name + " (" + off + ")",

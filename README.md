@@ -280,11 +280,11 @@ The extension records how long you spend on each site (active-tab time per domai
 - Internal pages (`browser://`, `chrome://`, the extension store) are not accessible.
 - Debugger-based tools (`browser_eval`, all `browser_cdp_*`, `screenshot fullPage`, `console_logs`) show a yellow "is debugging this tab" bar. `browser_cdp_detach` removes it. Other tools work without it.
 - JS runs only in the page context: the extension's isolated world forbids `eval` (Manifest V3).
-- The server listens only on `127.0.0.1:17555`. By default there is no password, so any **local** program that connects to the port gets control of the browser. Set one with `browser_password` (the agent can do it itself and will tell you the password) or from the extension popup; then only this extension can connect. The popup's **pause switch** blocks every command from the agent until you switch it back. Change the port with `BROWSER_BRIDGE_PORT` (server) and the `WS_URL` constant in `extension/background.js`.
+- The server listens only on `127.0.0.1:17555`. By default there is no password, so any **local** program that connects to the port gets control of the browser. Set one with `browser_password` (the agent can do it itself and will tell you the password) or from the extension popup; then only this extension can connect. The popup's **pause switch** blocks every command from the agent until you switch it back. Change the port with `YX_BRIDGE_PORT` (server) and the `WS_URL` constant in `extension/background.js`.
 - Yandex Browser auto-translates pages: text from foreign sites may arrive in Russian. See "Auto-translation".
 - `browser_ui_*` and `browser_translate_menu` are Windows-only and need the browser window on screen (not minimised). They move the real cursor for a fraction of a second.
 - Discarded (sleeping) tabs come with `status: "unloaded"`; call `browser_activate_tab` first.
-- Screenshots are saved to the system temp folder (`yx-bridge-shots`); change with `BROWSER_SHOT_DIR`.
+- Screenshots are saved to the system temp folder (`yx-bridge-shots`); change with `YX_BRIDGE_SHOT_DIR`.
 - Only one agent can hold port 17555 at a time; the extension talks to whichever server started first.
 
 ## 5. Testing and debugging
@@ -623,11 +623,11 @@ Gemini CLI, Windsurf, Cline, Claude Desktop, VS Code Copilot, Zed) и пропи
 - Внутренние страницы (`browser://`, `chrome://`, магазин расширений) недоступны.
 - Инструменты через отладчик (`browser_eval`, все `browser_cdp_*`, `screenshot fullPage`, `console_logs`) показывают жёлтую полосу «Расширение начало отладку». Убирается `browser_cdp_detach`. Остальные работают без неё.
 - JS выполняется только в контексте страницы: изолированный мир расширения запрещает `eval` (Manifest V3).
-- Сервер слушает только `127.0.0.1:17555`. По умолчанию пароля нет, поэтому любая **локальная** программа, подключившись к порту, получит управление браузером. Поставьте пароль инструментом `browser_password` (агент сделает это сам и сообщит вам пароль) или из поп-апа расширения, тогда подключится только это расширение. **Переключатель паузы** в поп-апе блокирует все команды агента, пока вы его не вернёте. Порт меняется переменной `BROWSER_BRIDGE_PORT` (сервер) и константой `WS_URL` в `extension/background.js`.
+- Сервер слушает только `127.0.0.1:17555`. По умолчанию пароля нет, поэтому любая **локальная** программа, подключившись к порту, получит управление браузером. Поставьте пароль инструментом `browser_password` (агент сделает это сам и сообщит вам пароль) или из поп-апа расширения, тогда подключится только это расширение. **Переключатель паузы** в поп-апе блокирует все команды агента, пока вы его не вернёте. Порт меняется переменной `YX_BRIDGE_PORT` (сервер) и константой `WS_URL` в `extension/background.js`.
 - Яндекс Браузер автоматически переводит страницы: текст с иностранных сайтов может прийти по-русски. См. «Автоперевод».
 - `browser_ui_*` и `browser_translate_menu` работают только на Windows и требуют, чтобы окно браузера было видно на экране (не свёрнуто). Они двигают настоящий курсор на долю секунды.
 - Выгруженные (спящие) вкладки приходят со `status: "unloaded"`; сначала `browser_activate_tab`.
-- Скриншоты сохраняются во временную папку системы (`yx-bridge-shots`), путь меняется `BROWSER_SHOT_DIR`.
+- Скриншоты сохраняются во временную папку системы (`yx-bridge-shots`), путь меняется `YX_BRIDGE_SHOT_DIR`.
 - Порт 17555 занимает один агент за раз; расширение работает с тем сервером, который стартовал первым.
 
 ## 5. Проверка и отладка

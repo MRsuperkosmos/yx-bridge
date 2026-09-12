@@ -38,9 +38,9 @@ const CANDIDATES = {
 
 export function locate({ userData, profile = "Default", exe } = {}) {
   const c = CANDIDATES[process.platform] || CANDIDATES.linux;
-  const ud = userData || process.env.BROWSER_USER_DATA || c.userData.find((p) => fs.existsSync(p));
-  const bin = exe || process.env.BROWSER_EXE || c.exe.find((p) => fs.existsSync(p));
-  if (!ud) throw new Error("browser user-data dir not found; set BROWSER_USER_DATA");
+  const ud = userData || process.env.YX_BRIDGE_USER_DATA || c.userData.find((p) => fs.existsSync(p));
+  const bin = exe || process.env.YX_BRIDGE_EXE || c.exe.find((p) => fs.existsSync(p));
+  if (!ud) throw new Error("browser user-data dir not found; set YX_BRIDGE_USER_DATA");
   const prefs = path.join(ud, profile, "Preferences");
   if (!fs.existsSync(prefs)) throw new Error(`Preferences not found: ${prefs}`);
   return { userData: ud, profile, prefs, exe: bin, processName: c.processName };
@@ -140,7 +140,7 @@ export async function closeBrowser(loc, { timeoutMs = 20000, force = false } = {
 }
 
 export function launchBrowser(loc, args = []) {
-  if (!loc.exe) throw new Error("browser executable not found; set BROWSER_EXE");
+  if (!loc.exe) throw new Error("browser executable not found; set YX_BRIDGE_EXE");
   const child = process.platform === "darwin" && loc.exe.endsWith("/MacOS/Yandex")
     ? spawn("open", ["-a", "Yandex", ...(args.length ? ["--args", ...args] : [])], { detached: true, stdio: "ignore" })
     : spawn(loc.exe, args, { detached: true, stdio: "ignore" });
