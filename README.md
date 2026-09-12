@@ -326,13 +326,13 @@ uninstall.cmd → Uninstall-YXBridge.ps1 automatic removal (Windows)
 install.ps1 / install.sh                    server + registration only
 build-zip.ps1                               build the distribution archive
 AGENT-INSTALL.md                            instructions for an AI agent installing the package
-LICENSE, NOTICE                             Apache 2.0, attribution
+LICENSE, LICENSE.ru, NOTICE                 Apache 2.0, attribution
 ```
 
 ## 7. License
 Copyright 2026 MRsuperkosmos. Created 12 September 2026.
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 or in the `LICENSE` file. Attribution notices are in the `NOTICE` file.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 or in the `LICENSE` file (an informational Russian translation is in `LICENSE.ru`). Attribution notices are in the `NOTICE` file.
 
 In short: you may use, modify, distribute and embed this software in your own projects, including commercial and closed-source ones, provided that you keep the copyright and attribution notices, include the `NOTICE` file, and mark the files you have changed. The name "MRsuperkosmos" may not be used to endorse or promote derived products without prior written permission.
 
@@ -670,13 +670,13 @@ uninstall.cmd → Uninstall-YXBridge.ps1 автоматическое удале
 install.ps1 / install.sh                    только сервер + регистрация
 build-zip.ps1                               сборка архива для передачи
 AGENT-INSTALL.md                            инструкция для ИИ-агента, устанавливающего пакет
-LICENSE, NOTICE                             Apache 2.0, авторство
+LICENSE, LICENSE.ru, NOTICE                 Apache 2.0, авторство
 ```
 
 ## 7. Лицензия
 Copyright 2026 MRsuperkosmos. Создано 12 сентября 2026.
 
-Распространяется под лицензией Apache License 2.0, полный текст в файле `LICENSE` (английский оригинал и справочный русский перевод), уведомление об авторстве в `NOTICE`.
+Распространяется под лицензией Apache License 2.0, полный текст в файле `LICENSE` (английский оригинал), справочный русский перевод в файле `LICENSE.ru`, уведомление об авторстве в `NOTICE`.
 
 Коротко: можно свободно использовать, менять, распространять и встраивать в свои проекты, включая коммерческие и закрытые, при условии сохранения уведомлений об авторстве, включения файла `NOTICE` и пометки изменённых файлов. Имя «MRsuperkosmos» нельзя использовать для одобрения или продвижения производных продуктов без письменного разрешения.
 

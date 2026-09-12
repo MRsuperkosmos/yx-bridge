@@ -15,6 +15,7 @@ Hardening done during the release review:
 - Installer fixes: the one-click Windows installer no longer aborts when a tool writes to stderr (a PowerShell 5.1 quirk that crashed it at the Claude Code registration and connection-check steps); the Claude Code config is read as UTF-8 and written without a BOM (Node cannot parse JSON with a BOM); the manual hint now says `chrome://extensions` (in Yandex Browser `browser://extensions` opens the catalog); the skip-pause variable is `YX_BRIDGE_NOPAUSE`. Leftovers of the project's old name were removed from the code (default notification title, content-script id, test strings, tool descriptions).
 - Environment variables unified under one prefix: `YX_BRIDGE_PORT`, `YX_BRIDGE_SHOT_DIR`, `YX_BRIDGE_USER_DATA`, `YX_BRIDGE_EXE` (alongside `YX_BRIDGE_TOKEN`, `YX_BRIDGE_TOKEN_FILE`, `YX_BRIDGE_NOPAUSE`). The popup footer shows the author instead of the tool count.
 - Toolbar icon replaced with the author's artwork: a white outline bulb on an orange rounded square (readable at a glance next to other extensions); the extension overlays the live status dot (green / red / yellow) in the corner.
+- `LICENSE` is now the plain English Apache-2.0 text so GitHub recognises the licence; the informational Russian translation lives in `LICENSE.ru`.
 - New offline test `server/test-auth.mjs` for the connection/password rules.
 
 ## 0.9.6 — 12 Sep
