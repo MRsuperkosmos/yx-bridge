@@ -17,6 +17,7 @@ $stage = Join-Path $env:TEMP "yx-bridge-stage\yx-bridge"
 if (Test-Path (Split-Path $stage)) { Remove-Item (Split-Path $stage) -Recurse -Force }
 New-Item -ItemType Directory -Force $stage | Out-Null
 Get-ChildItem $src -Recurse -File -Force | Where-Object {
+  $_.FullName -notmatch '\\\.git\\' -and
   $_.FullName -notmatch '\\node_modules\\' -and
   $_.FullName -notmatch '\\media-test\\' -and
   $_.Name -ne '.token' -and

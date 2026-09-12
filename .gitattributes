@@ -1,0 +1,9 @@
+# Normalize line endings in the repository.
+# Shell scripts must stay LF so they run from a Windows clone (WSL / Git Bash);
+# Windows batch/PowerShell files are kept CRLF.
+* text=auto
+*.sh text eol=lf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.png binary
+*.zip binary
